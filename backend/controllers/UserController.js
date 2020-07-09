@@ -10,13 +10,13 @@ exports.validate = (method) => {
 			return [
 				body('userName', `userName doesn't exists`).exists().isLength({min: 2}),
 				body('email', 'Invalid email').exists().isEmail(),
-				body('password').exists().isLength({min: 4, max: 10}),
+				body('password').exists().isLength({min: 4, max: 20}),
 			];
 		}
 		case 'login': {
 			return [
 				body('email', 'Invalid email').isEmail(),
-				body('password').isLength({min: 4, max: 10}),
+				body('password').isLength({min: 4, max: 20}),
 			];
 		}
 	}
