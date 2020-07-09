@@ -1,18 +1,39 @@
-import {signupService} from "../services/signupService";
 import axios from "axios";
 
-export const login = ({email, password}) => ({
-    type: "LOGIN",
-    payload: {
-        email,
-        password
-    }
-})
+export const login =  ({email, password}) => async (dispatch, getState) => {
+  dispatch({
+      type: "LOGIN",
+    })
+
+  axios
+    .post(`http://localhost:3000/login`, {
+    email,
+    password
+    })
+    .then(res => {
+      dispatch({
+        type: "LOGIN_SUCCESS",
+        payload: {
+          token: res.data.token
+        }
+     })
+    })
+    .catch(err => {
+      dispatch({
+        type: "LOGIN_FAILURE",
+        payload: {
+          errors: err.response.data
+        }
+      }) 
+      console.log("err : ", err.response.data)
+    });
+}
 
 export const signup = ({email, password, userName}) => async (dispatch, getState) => {
     dispatch({
         type: "SIGNUP",
-    })
+      })
+
     axios
       .post(`http://localhost:3000/signup`, {
       userName,
@@ -20,9 +41,20 @@ export const signup = ({email, password, userName}) => async (dispatch, getState
       password
       })
       .then(res => {
-        console.log("result : ", res)
+        dispatch({
+          type: "SIGNUP_SUCCESS",
+          payload: {
+            token: res.data.token
+          }
+       })
       })
       .catch(err => {
-        console.log("err : ", err)
+        dispatch({
+          type: "SIGNUP_FAILURE",
+          payload: {
+            errors: err.response.data
+          }
+        })
+        console.log("err : ", err.response.data)
       });
 }

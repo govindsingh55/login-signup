@@ -6,7 +6,9 @@ const initialState = {
     token: null,
     isLoggingIn: false,
     isSigningUp: false,
-    errors: null,
+    signupErrors: null,
+    loginErrors: null,
+    user: null
 }
 
 const Reducer = (state = initialState, action) => {
@@ -16,10 +18,23 @@ const Reducer = (state = initialState, action) => {
                 ...state,
                 token: action.payload.token
             }
-        case 'SET_LOGIN':
+        case 'LOGIN':
             return {
                 ...state,
-                isLoggingIn: action.payload.isLoggingIn
+                isLoggingIn: true
+            }
+        case 'LOGIN_SUCCESS':
+            return {
+                ...state,
+                token: action.payload.token,
+                user: action.payload.user,
+                isLoggingIn: false
+            }
+        case 'LOGIN_FAILURE':
+            return {
+                ...state,
+                isLoggingIn: false,
+                loginErrors: action.payload.errors
             }
         case 'SIGNUP':
             return {
@@ -30,12 +45,14 @@ const Reducer = (state = initialState, action) => {
             return {
                 ...state,
                 token: action.payload.token,
+                user: action.payload.user,
                 isSigningUp: false
             }
-        case 'SIGNUP_SUCCESS':
+        case 'SIGNUP_FAILURE':
             return {
                 ...state,
-                errors: action.payload.errors
+                isSigningUp: false,
+                signupErrors: action.payload.errors
             }
         default: 
             return state

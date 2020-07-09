@@ -8,9 +8,9 @@ exports.validate = (method) => {
 	switch (method) {
 		case 'signup': {
 			return [
-				body('userName', `userName doesn't exists`).exists(),
+				body('userName', `userName doesn't exists`).exists().isLength({min: 2}),
 				body('email', 'Invalid email').exists().isEmail(),
-				body('password').isLength({min: 4, max: 10}),
+				body('password').exists().isLength({min: 4, max: 10}),
 			];
 		}
 		case 'login': {
@@ -120,7 +120,7 @@ exports.login = (req, res, next) => {
           );
           return res.status(200).json({
             message: "Auth successful",
-            userId: user._id,
+            data: user,
             token: token,
           });
         }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Switch, Route, BrowserRouter as Router } from 'react-router-dom'
+import { Switch, Route, BrowserRouter as Router, Redirect } from 'react-router-dom'
 import SignUp from "./components/signup";
 import Login from "./components/login";
 import {Provider} from "react-redux";
@@ -21,6 +21,7 @@ const Routes = () => (
     <Switch>
       <Route exact path='/signup' component={SignUp}/>
       <Route exact path='/login' component={Login}/>
+      <Redirect from="/" to="/login"/>
     </Switch>
   </Router>
   </Provider>
