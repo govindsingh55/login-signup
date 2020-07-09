@@ -6,7 +6,7 @@ export const login =  ({email, password}) => async (dispatch, getState) => {
     })
 
   axios
-    .post(`http://localhost:3000/login`, {
+    .post(`http://localhost:8000/login`, {
     email,
     password
     })
@@ -35,7 +35,7 @@ export const signup = ({email, password, userName}) => async (dispatch, getState
       })
 
     axios
-      .post(`http://localhost:3000/signup`, {
+      .post(`http://localhost:8000/signup`, {
       userName,
       email,
       password
