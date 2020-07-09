@@ -29,7 +29,7 @@ export const login =  ({email, password}) => async (dispatch, getState) => {
     });
 }
 
-export const signup = ({email, password, userName}) => async (dispatch, getState) => {
+export const signup = ({email, password, userName}) => (dispatch, getState) => {
     dispatch({
         type: "SIGNUP",
       })
@@ -58,3 +58,9 @@ export const signup = ({email, password, userName}) => async (dispatch, getState
         console.log("err : ", err.response.data)
       });
 }
+
+export const resetToken = () => (dispatch, getState) => {
+  dispatch({
+    type: "RESET_TOKEN",
+  })
+} 

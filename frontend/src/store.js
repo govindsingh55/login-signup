@@ -13,7 +13,7 @@ const initialState = {
 
 const Reducer = (state = initialState, action) => {
     switch(action.type){
-        case 'SET_TOKEN':
+        case 'RESET_TOKEN':
             return {
                 ...state,
                 token: action.payload.token
@@ -21,7 +21,9 @@ const Reducer = (state = initialState, action) => {
         case 'LOGIN':
             return {
                 ...state,
-                isLoggingIn: true
+                isLoggingIn: true,
+                token: null,
+                loginErrors: null
             }
         case 'LOGIN_SUCCESS':
             return {
@@ -39,7 +41,9 @@ const Reducer = (state = initialState, action) => {
         case 'SIGNUP':
             return {
                 ...state,
-                isSigningUp: true
+                isSigningUp: true,
+                token: null,
+                signupErrors: null
             }
         case 'SIGNUP_SUCCESS':
             return {

@@ -1,11 +1,11 @@
 import { connect } from 'react-redux';
 import React from 'react';
-import { login } from '../actions';
+import { login, resetToken } from '../actions';
 import { Box, Flex, Heading, Stack, Input, Button, Text, Icon } from '@chakra-ui/core';
 import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
-const Login = ({ loginUser, token, isLoggingIn }) => {
+const Login = ({ loginUser, token, isLoggingIn, loginError, resetToken }) => {
 	let history = useHistory();
 	const { handleSubmit, register, errors } = useForm();
 	const onSubmit = (values, e) => {
@@ -80,11 +80,17 @@ const Login = ({ loginUser, token, isLoggingIn }) => {
 						variant="link"
 						rightIcon="arrow-forward"
 						mt="2rem"
-						onClick={() => history.push('/signup')}
+						onClick={() => {
+							resetToken();
+							history.push('/signup');
+						}}
 					>
 						Sign Up
 					</Button>
 					{!isLoggingIn && token && <Icon name="check-circle" mt="1rem" size="50px" color="green.600" />}
+					{!isLoggingIn && token && <Box color="green.600">{"Auth Sucessfull"}</Box>}
+					{!isLoggingIn && (loginError && loginError.message) && <Icon name="check-circle" mt="1rem" size="50px" color="red.600" />}
+					{!isLoggingIn && (loginError && loginError.message) && <Box color="red.600">{`${loginError.message}`}</Box>}
 				</Flex>
 			</Flex>
 		</Box>
@@ -94,12 +100,14 @@ const Login = ({ loginUser, token, isLoggingIn }) => {
 const mapStateToProps = (state) => {
 	return {
 		token: state.token,
-		isLoggingIn: state.isLoggingIn
+		isLoggingIn: state.isLoggingIn,
+		loginError: state.loginErrors,
 	};
 };
 
 const mapDispatchToProps = {
-	loginUser: login
+	loginUser: login,
+	resetToken: resetToken
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

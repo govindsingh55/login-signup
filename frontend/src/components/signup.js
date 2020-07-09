@@ -1,11 +1,11 @@
 import { connect } from 'react-redux';
 import React from 'react';
-import { signup } from '../actions';
+import { signup, resetToken } from '../actions';
 import { Box, Flex, Heading, Stack, Input, Button, Text, Icon } from '@chakra-ui/core';
 import { useHistory } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 
-const SignUp = ({ signupUser, token, isSigningUp }) => {
+const SignUp = ({ signupUser, token, isSigningUp, resetToken, signupError }) => {
 	let history = useHistory();
 	const { handleSubmit, register, errors } = useForm();
 	const onSubmit = (values, e) => {
@@ -17,7 +17,15 @@ const SignUp = ({ signupUser, token, isSigningUp }) => {
 	return (
 		<Box className="App">
 			<Flex minH="100vh" width="full" align="center" justifyContent="center">
-				<Flex as="form" flexDir="column" bg="white" width="60%" alignItems="center" p="5rem" onSubmit={handleSubmit(onSubmit)}>
+				<Flex
+					as="form"
+					flexDir="column"
+					bg="white"
+					width="60%"
+					alignItems="center"
+					p="5rem"
+					onSubmit={handleSubmit(onSubmit)}
+				>
 					<Heading color="teal.400" textAlign="center" mb="3rem">
 						Create Account
 					</Heading>
@@ -27,8 +35,8 @@ const SignUp = ({ signupUser, token, isSigningUp }) => {
 								name="userName"
 								placeholder="Name"
 								size="lg"
-                bg="gray.100"
-                ref={register({
+								bg="gray.100"
+								ref={register({
 									required: 'Required',
 									minLength: {
 										value: 2,
@@ -36,53 +44,51 @@ const SignUp = ({ signupUser, token, isSigningUp }) => {
 									}
 								})}
 							/>
-              {errors.userName && (
+							{errors.userName && (
 								<Text color="red.500" fontSize="10px">{`*${errors.userName.message}`}</Text>
 							)}
 						</Box>
-            <Box>
-              <Input
-                name="email"
-                placeholder="Email"
-                size="lg"
-                bg="gray.100"
-                ref={register({
+						<Box>
+							<Input
+								name="email"
+								placeholder="Email"
+								size="lg"
+								bg="gray.100"
+								ref={register({
 									required: 'Required',
 									pattern: {
 										value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
 										message: 'invalid email address'
 									}
 								})}
-              />
-              {errors.email && (
-								<Text color="red.500" fontSize="10px">{`*${errors.email.message}`}</Text>
-							)}
-            </Box>
-            <Box>
-              <Input
-                type="password"
-                name="password"
-                ref={register({
+							/>
+							{errors.email && <Text color="red.500" fontSize="10px">{`*${errors.email.message}`}</Text>}
+						</Box>
+						<Box>
+							<Input
+								type="password"
+								name="password"
+								ref={register({
 									required: 'Required',
 									minLength: {
 										value: 4,
 										message: 'password must be 4 character long!'
 									}
 								})}
-                placeholder="Password"
-                size="lg"
-                bg="gray.100"
-              />
+								placeholder="Password"
+								size="lg"
+								bg="gray.100"
+							/>
 							{errors.password && (
 								<Text color="red.500" fontSize="10px">{`*${errors.password.message}`}</Text>
 							)}
-            </Box>
+						</Box>
 					</Stack>
 					<Button
 						isLoading={isSigningUp}
 						loadingText="SIGNING UP"
-            variantColor="teal"
-            type="submit"
+						variantColor="teal"
+						type="submit"
 						mt="2rem"
 						width="50%"
 						size="lg"
@@ -98,7 +104,10 @@ const SignUp = ({ signupUser, token, isSigningUp }) => {
 					>
 						Log In
 					</Button>
-          {!isSigningUp && token && <Icon name="check-circle" mt="1rem" size="50px" color="green.600" />}
+					{!isSigningUp && token && <Icon name="check-circle" mt="1rem" size="50px" color="green.600" />}
+					{!isSigningUp && token && <Box color="green.600">{"Account Created Sucessfull"}</Box>}
+					{!isSigningUp && (signupError && signupError.message) && <Icon name="check-circle" mt="1rem" size="50px" color="red.600" />}
+					{!isSigningUp && (signupError && signupError.message) && <Box color="red.600">{`${signupError.message}`}</Box>}
 				</Flex>
 			</Flex>
 		</Box>
@@ -108,12 +117,14 @@ const SignUp = ({ signupUser, token, isSigningUp }) => {
 const mapStateToProps = (state) => {
 	return {
 		token: state.token,
-		isSigningUp: state.isSigningUp
+		isSigningUp: state.isSigningUp,
+		signupError: state.signupErrors
 	};
 };
 
 const mapDispatchToProps = {
-	signupUser: signup
+	signupUser: signup,
+	resetToken: resetToken
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignUp);

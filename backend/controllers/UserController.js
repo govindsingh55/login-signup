@@ -106,7 +106,7 @@ exports.login = (req, res, next) => {
             message: 'Auth failed',
             error: err
           });
-        } else {
+        } else if(result) {
           const token = jwt.sign(
             {
               email: user.email,
@@ -122,6 +122,10 @@ exports.login = (req, res, next) => {
             message: "Auth successful",
             data: user,
             token: token,
+          });
+        }else {
+          return res.status(500).json({
+            message: 'UserName or password is wrong'
           });
         }
       })
